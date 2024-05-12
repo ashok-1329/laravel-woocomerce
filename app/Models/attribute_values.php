@@ -1,6 +1,4 @@
-
 <?php
-
 namespace App\Models;
 use App\Models\attributes;
 use App\Models\product_variations;

@@ -13,7 +13,7 @@
             </div>
 
             <div class="form-group">
-                <label for="name">Category:</label>
+                <label for="category">Category:</label>
                 <select class="form-control" name="category_id">
                    @foreach($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -26,10 +26,27 @@
                 <input type="number" name="price" id="price" class="form-control" required>
             </div>
 
+             <div class="form-group">
+                <label for="image">Product Image:</label>
+                <input type="file" name="image" id="image" class="form-control" required>
+            </div>
+
             <div class="form-group">
                 <label for="description">Description:</label>
                 <textarea name="description" id="description" class="form-control"></textarea>
             </div>
+
+
+                                @foreach($attributes as $attribute)
+                                <h6 class="product-title">{{ $attribute['name'] }}</h6>
+                                <div class="size-box">
+                                        <ul>
+                                            @foreach($attribute['values'] as $values)
+                                                <li ><a href="#">{{ $values->value }}</a></li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                            @endforeach
 
             <button type="submit" class="btn btn-success">Add Product</button>
         </form>

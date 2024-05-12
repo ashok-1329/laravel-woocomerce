@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 use App\Models\attribute_values;
 use App\Models\products;
@@ -12,7 +11,7 @@ class attributes extends Model
 
     public function values()
     {
-        return $this->hasMany(attribute_values::class);
+        return $this->hasMany(attribute_values::class, 'attribute_id');
     }
 
     public function products()

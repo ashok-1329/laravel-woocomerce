@@ -25,15 +25,18 @@
                   <li class="nav-item">
                     <a class="nav-link {{ request()->is('products') ? 'active' : '' }}" href="{{ route('products.index') }}">Products</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link {{ request()->is('add-product') ? 'active' : '' }}" href="{{ route('add_product') }}">Add Product</a>
-                  </li>
                 </ul>
               </div>
              </div>
           </div>
       </nav>
     </header>
+
+    @if(session('success'))
+    <div class="alert alert-success" id="success-message">
+        {{ session('success') }}
+    </div>
+  @endif
 
     <main>
         <!-- Main content area -->
@@ -71,6 +74,8 @@
               ]
           });
         });
-
+setTimeout(function() {
+        document.getElementById('success-message').style.display = 'none';
+    }, 3000); // 3000 milliseconds = 3 seconds
 </script>
 </html>

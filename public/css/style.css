@@ -301,6 +301,19 @@ a.nav-link.active {
     background-color: #5cb85c;
     border-color: #5cb85c;
 }
+
+.bg-light {
+    background-color: grey !important;
+}
+
+
+ul.navbar-nav.me-auto.mb-2.mb-lg-0 li {
+    margin-right: 15px;
+}
+
+.navbar-light .navbar-brand {
+    color: #fff;
+}
 /*=====================
     1.1.Button CSS start
 ==========================*/

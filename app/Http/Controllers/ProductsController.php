@@ -10,6 +10,7 @@ use App\Models\attributes;
 use App\Models\categories;
 use DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 
 class ProductsController extends Controller
@@ -34,9 +35,11 @@ class ProductsController extends Controller
 
     public function show($id)
     {
-    //    $product = products::findOrFail($id);
 
-        $product = products::with('variations','attributes')->findOrFail($id);
+        $product = products::with('variations', 'attributes')
+        ->where('id', $id)
+        ->orderBy('id', 'desc')
+        ->firstOrFail();
         
         foreach ($product['attributes'] as $key => $value) {
 
@@ -61,13 +64,8 @@ class ProductsController extends Controller
             $product['variations'][$key]['availabe-attribute'] = $variations;
             
         }
-         $jsonData = json_encode($product); // Convert data to JSON manually
-
-        // Pass the JSON data to the view using the view helper
+        $jsonData = json_encode($product);
         return view('show', compact('jsonData','product'));
-
-        // return response()->json($product);
-        // return view('show', compact('product'));
     }
 
      /**
@@ -76,7 +74,12 @@ class ProductsController extends Controller
     public function create()
     {
         $categories = categories::all();
-        return view('add-product', compact('categories'));
+      
+        $attributes = attributes::with('values')->get();
+        // echo "<pre/>";
+        // print_r($attributes);
+        // die('here');
+        return view('add-product', compact('categories', 'attributes'));
     }
 
     /**
@@ -91,14 +94,11 @@ class ProductsController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'category_id' => 'required'
-            // Add more validation rules as needed
         ]);
 
         // Create a new product instance with the validated data
         $product = products::create($validatedData);
 
-        // Optionally, you can redirect the user to a specific page after storing the product
-        //return redirect()->route('products')->with('success', 'Product created successfully');
         return redirect()->route('products.index')->with('success', 'Product created successfully');
 
     }
