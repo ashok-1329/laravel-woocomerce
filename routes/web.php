@@ -19,8 +19,10 @@ Route::get('/', function () {
 });
 
 Route::get('products', [ProductsController::class, 'index'])->name('products.index');
-
 Route::get('products/{id}', [ProductsController::class, 'show'])->name('products.show');
+Route::get('/add-product', [ProductsController::class, 'create'])->name('add_product');
+Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+
 
 
 
