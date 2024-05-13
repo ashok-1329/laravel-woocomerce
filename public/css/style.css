@@ -184,6 +184,10 @@ hr.style1 {
 .bg_cls {
   background-color: #fafafa; }
 
+  .error {
+    color: red;
+  }
+
 del {
   font-size: 14px;
   color: #aaaaaa;
@@ -313,6 +317,14 @@ ul.navbar-nav.me-auto.mb-2.mb-lg-0 li {
 
 .navbar-light .navbar-brand {
     color: #fff;
+}
+
+.form-error {
+  visibility: hidden;
+}
+
+.show-attribute {
+ display: none;
 }
 /*=====================
     1.1.Button CSS start
@@ -660,7 +672,19 @@ button.btn.btn-solid:active, button.btn.btn-outline:active {
     .timer span .padding-l {
       padding-left: 22px;
       display: inline; }
+.success-message {
+    text-align: center;
+    color: green;
+    font-size: 24px;
+}
 
+.product-list, button.btn.btn-default {
+    border: 2px solid green;
+    color: black;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 5px;
+}
 /*=====================
     9.Category CSS start
 ==========================*/
@@ -2466,7 +2490,7 @@ button.btn.btn-solid:active, button.btn.btn-outline:active {
               justify-content: center;
       height: 100%; }
     .product-right .size-box ul li.active {
-      background-color: #f7f7f7; }
+      background-color: #cbb7b7; }
 
 .product-right .product-icon {
   display: -webkit-box;

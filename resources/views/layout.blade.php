@@ -40,11 +40,6 @@
 
     <main>
         <!-- Main content area -->
-        @yield('breadcurm')
-    </main>
-
-    <main>
-        <!-- Main content area -->
         @yield('content')
     </main>
 
@@ -54,28 +49,115 @@
     </footer>
 
 </body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script> 
       <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
       <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript">
-        $(function () {
-          var table = $('#myTable').DataTable({
-              processing: true,
-              serverSide: true,
-              ajax: "{{ route('products.index') }}",
-              columns: [
-                  {data: 'name', name: 'name'},
-                  {data: 'description', name: 'description'},
-                  {data: 'price', name: 'price'},
-                  {data: 'action', name: 'action', orderable: false, searchable: false},
-              ]
-          });
+      <script type="text/javascript">
+              $(function () {
+                var table = $('#myTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('products.index') }}",
+                    columns: [
+                        {data: 'name', name: 'name'},
+                        {data: 'description', name: 'description'},
+                        {data: 'price', name: 'price'},
+                        {data: 'action', name: 'action', orderable: false, searchable: false},
+                    ]
+                });
+              });
+
+              document.addEventListener("DOMContentLoaded", function() {
+                  var successMessage = document.getElementById('success-message');
+                  if (successMessage) {
+                      setTimeout(function() {
+                          successMessage.style.display = 'none';
+                      }, 3000);
+                  }
+              });
+      </script>
+
+<script>
+    $(document).ready(function() {
+        $('#attribute').click(function(){
+            $('.show-attribute').show();
+        })
+
+        $('#productSucess').on('click', '.modal-close', function() {
+            $('#productSucess').modal('hide');
         });
-setTimeout(function() {
-        document.getElementById('success-message').style.display = 'none';
-    }, 3000); // 3000 milliseconds = 3 seconds
+    })
+
+    let variations = [];
+
+    function addVariation() {
+        const sizeSelect = document.getElementById('SizeSelect');
+        const colorSelect = document.getElementById('ColorSelect');
+        const var_stock = document.getElementById('var_stock');
+    
+        const size = sizeSelect.value;
+        const color = colorSelect.value;
+        const stock = var_stock.value;
+
+        if(size > 0 && color > 0 && stock !="") { 
+          variations.push({ attributeValueIds: [color, size], stock });
+           $(".error-message").html();
+        } else {
+          $(".error-message").html('Please select the attribute variation.');
+        }
+
+        sizeSelect.selectedIndex = 0;
+        colorSelect.selectedIndex = 0;
+        var_stock.value = "";
+    }
+
+    async function saveVariation() {
+
+      var name = $('#name').val();
+      var price = $('#price').val();
+      var image = $('#imageInput').val();
+
+      if (name == "" || price == "" || image == "") {
+        showErrorMessage('All fields with * are required.');
+      } else if(variations.length == 0) {
+        showErrorMessage('Please select product variation.');
+      } else {
+         if(variations.length !=0) {
+
+        const formData = new FormData(document.getElementById('variationForm'));
+        var fileInput = $('#imageInput')[0].files[0];
+      
+        formData.append('image', fileInput); 
+        formData.append('variationsData', JSON.stringify(variations))
+       
+
+        const token = new FormData(document.getElementById('variationForm'));
+       
+        const attributeIds = [];
+        $('.product-title').each(function() {
+              attributeIds.push($(this).data('id'));
+        });
+        formData.append('attributeIds', JSON.stringify(attributeIds));
+
+        const response = await fetch('{{ route("save.product") }}',{method:'POST', body:formData})
+        const data = await response.json();
+            if (data.success) {
+              $('#variationForm')[0].reset();
+              $('.form-error').html("");
+              $('#productSucess').modal('show');
+            }
+      }
+      }
+     
+    }
+    function showErrorMessage(msg) {
+      if(msg!="") {
+        $('.form-error').css("visibility", 'visible')
+        $('.form-error').html(msg);
+      }
+    }
 </script>
 </html>
