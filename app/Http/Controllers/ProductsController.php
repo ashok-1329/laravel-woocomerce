@@ -145,7 +145,7 @@ class ProductsController extends Controller
         }
         return response()->json([
             "success" => true,
-            "message" => "Product created successfully.",
+            "message" => "Product added successfully.",
         ]);
     }
 }
