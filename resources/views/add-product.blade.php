@@ -40,6 +40,9 @@
             <br/>
             <button type="button" class="btn btn-success" id="attribute">Add Attribute</button>
             <div class="show-attribute mt-3">
+            <div id="variationsContainer">
+                <!-- Variations will be displayed here -->
+            </div>
                 @foreach($attributes as $attribute)
                     <h6 class="product-title" data-id={{$attribute["id"]}}>{{ $attribute['name'] }}<span class="error">*</span></h6>
                     <div class="size-box">

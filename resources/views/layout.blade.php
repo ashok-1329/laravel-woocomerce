@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <!-- Additional CSS or stylesheets -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}" sizes="32x32" />
     <title>@yield('title')</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
     <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -15,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container-fluid">
-              <a class="navbar-brand" href="/">Logo</a>
+              <a class="navbar-brand" href="/"><img src="{{ asset('images/logo-1.jpg') }}" height="50px"></a>
              <div class="container">
                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -92,6 +93,7 @@
     })
 
     let variations = [];
+    let variationsValue = [];
 
     function addVariation() {
         const sizeSelect = document.getElementById('SizeSelect');
@@ -102,9 +104,16 @@
         const color = colorSelect.value;
         const stock = var_stock.value;
 
+        const sizeValue = sizeSelect.options[sizeSelect.selectedIndex].text;
+        const colorValue = colorSelect.options[colorSelect.selectedIndex].text;
+
+
         if(size > 0 && color > 0 && stock !="") { 
+
           variations.push({ attributeValueIds: [color, size], stock });
+          variationsValue.push({ attributeValueValue: [sizeValue, colorValue], stock });
            $(".error-message").html();
+           displayVariations();
         } else {
           $(".error-message").html('Please select the attribute variation.');
         }
@@ -112,6 +121,21 @@
         sizeSelect.selectedIndex = 0;
         colorSelect.selectedIndex = 0;
         var_stock.value = "";
+    }
+
+
+    function displayVariations() {
+      // Clear existing content in the container
+        $('#variationsContainer').empty();
+
+        // Loop through variations and create HTML for each
+        variationsValue.forEach(function(variationVal) {
+            var html = '<div>';
+            html += 'Attribute Values: ' + variationVal.attributeValueValue.join(', ') + '<br>';
+            html += 'Stock: ' + variationVal.stock + '<br>';
+            html += '</div>';
+            $('#variationsContainer').append(html);
+        });
     }
 
     async function saveVariation() {
